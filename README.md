@@ -1,71 +1,55 @@
-# HTML Canvas Gauges v2.1
+# HTML Canvas Gauges + mods
 
-[![Build Status](https://travis-ci.org/Mikhus/canvas-gauges.svg?branch=master)](https://travis-ci.org/Mikhus/canvas-gauges) ![Test Coverage](https://rawgit.com/Mikhus/canvas-gauges/master/test-coverage.svg) ![Documentation Coverage](https://rawgit.com/Mikhus/canvas-gauges/master/docs-coverage.svg) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://rawgit.com/Mikhus/canvas-gauges/master/LICENSE)
+This is a fork of [HTML Canvas Gauges](https://github.com/Mikhus/canvas-gauges) with some additional functionalities
 
-[![Canvas Gauges](https://raw.githubusercontent.com/Mikhus/blob/master/gauges.png)](https://rawgit.com/Mikhus/canvas-gauges/master/examples/radial-component.html)
+Original readme available [here](./README_ORIGINAL.md)
 
-<!-- toc -->
+All credits for the HTML Canvas Gauge library go to the respective authors.
 
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Add-Ons](#add-ons)
-- [Special Thanks](#special-thanks)
-- [License](#license)
+## Changelog
 
-<!-- tocstop -->
+### v 1.0.0
+- Initial release of modded version
 
-This is tiny implementation of highly configurable gauge using pure JavaScript and HTML5 canvas.
-No dependencies. Suitable for IoT devices because of minimum code base.
+## Features
 
-## Installation
+This fork includes the following additional features
 
-Canvas gauges can be simply installed using npm package manager. Depending on your needs there is possibility to install whole gauge library or only that part you really need for your project.
-To install the whole library, run:
+### Value box and Units label offset
 
-    $ npm install canvas-gauges
+The following new settings allow you to apply an offset to the position of the Value Box and Units label:
 
-If you only need the exact type of the gauge it can be installed using the appropriate npm tag. Currently the following gauges are supported: linear, radial.
+|Option|Description|Type|Default
+|-|-|-|-|
+|`valueBoxVerticalOffset`|Shifts the Value Box vertically|`Number`|`0`|
+|`valueBoxHorizontalOffset`|Shifts the Value Box horizontally|`Number`|`0`|
+|`unitsVerticalOffset`|Shifts the units label vertically|`Number`|`0`|
+|`unitsHorizontalOffset`|Shifts the units label horizontally|`Number`|`0`|
 
-To install only linear gauge, run:
 
-    $ npm install canvas-gauges@linear
+### Individual ticks side in linear gauge
 
-To install only radial gauge, run:
+With this option you can control on which side (left/top, right/bottom or both) each individual tick and tick label in a linear gauge are drawn. This allows you to have some ticks on one side and some on the other, instead of having to chose the side for the entire tickbar.
 
-    $ npm install canvas-gauges@radial
+This option only works if the `exactTicks` option is set to true, i.e.: when you're explicitly providing the gauge with an array of ticks, rather than having them auto-generated.
 
-This strategy useful only if you need to minimize your code base and plan to use ONLY a specific gauge type. If you need to use various gauge types in your project it is recommended to use whole gauge package.
+To use it, add to the gauge options the `majorTicksSides` object, which must be an array with the same length as the `majorTicks` array and, for each position, contains the behavior for the corresponding tick. The supported values are:
+- `left` - only show the tick on the left side (or top side for horizontal gauges)
+- `right` - only show the tick on the right side (or bottom side for horizontal gauges)
+- `both` - show on both sides
 
-[More...](http://canvas-gauges.com/documentation/user-guide/#installing)
+NOTE: this option does not override the global `tickSide` option, which will still limit drawing on a single side if set to a value different from `both`.
 
-## Documentation
+Here is an example of use:
+```JSON
+{
+    "exactTicks": true,
+    "tickSide": "both",
+    "majorTicks": [0, 10, 15, 100],
+    "majorTicksSides": ["both", "left", "right", "both"]
+    ...
+}
+```
+the resoult would be something like this:
 
-You can find complete docs on the canvas gauges web-site:
-
- * [User Guide](http://canvas-gauges.com/documentation/user-guide/)
- * [Developer's Docs](http://canvas-gauges.com/documentation/api/)
- * [Examples](http://canvas-gauges.com/documentation/examples/)
-
-## Add-Ons
-
-Here are some third-party libraries which are developed and delivered to use canvas-gauges as components for a different popular frameworks:
-
- - [Angular gauge components](https://github.com/MeetmeLeave/ng-canvas-gauges)
- - [VueJs gauge components](https://github.com/vue-bulma/canvas-gauges)
- - [React gauge component](https://github.com/1995parham/react-canvas-gauges)
-
-## Special Thanks
-
-[![Lohika](http://www.lohika.com/wp-content/themes/gridalicious/images/lohika_full.svg)](http://www.lohika.com/)
-
-For supporting development!
-
-[![SauceLabs](http://info.saucelabs.com/rs/468-XBT-687/images/ink-logo.png)](http://saucelabs.com/)
-
-For testing support!
-
-And to all [contributors](https://github.com/Mikhus/canvas-gauges/graphs/contributors)!
-
-## License
-
-This code is subject to [MIT](https://rawgit.com/Mikhus/canvas-gauges/master/LICENSE) license.
+![](./assets/images/tick_sides.png)
